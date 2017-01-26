@@ -77,10 +77,23 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvNames"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none" />
+        android:layout_height="match_parent">
+        
+        <ProgressBar
+            android:id="@+id/tvEmpty"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_width="46dp"
+            android:layout_height="46dp" />
+
+        <phonebase.android.kizema.phonebasetestapp.util.AppRecyclerView
+            android:id="@+id/rvNames"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none" />
+
+    </FrameLayout>
 
 </LinearLayout>

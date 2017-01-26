@@ -7,12 +7,12 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -23,6 +23,7 @@ import phonebase.android.kizema.phonebasetestapp.model.Contact;
 import phonebase.android.kizema.phonebasetestapp.model.ContactHelper;
 import phonebase.android.kizema.phonebasetestapp.uicontrol.SearchButtonControl;
 import phonebase.android.kizema.phonebasetestapp.uicontrol.SortController;
+import phonebase.android.kizema.phonebasetestapp.util.AppRecyclerView;
 import phonebase.android.kizema.phonebasetestapp.util.DictionaryHelper;
 
 public class MainActivity extends BaseActivity {
@@ -37,6 +38,9 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.btnSearch)
     public ImageButton btnSearch;
 
+    @BindView(R.id.tvEmpty)
+    public ProgressBar tvEmpty;
+
     @BindView(R.id.btnAdd)
     public ImageButton btnAdd;
 
@@ -44,7 +48,7 @@ public class MainActivity extends BaseActivity {
     public EditText etSearch;
 
     @BindView(R.id.rvNames)
-    public RecyclerView rvNames;
+    public AppRecyclerView rvNames;
 
     private ContactAdapter contactAdapter;
 
@@ -92,6 +96,8 @@ public class MainActivity extends BaseActivity {
         LinearLayoutManager mChatLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvNames.setLayoutManager(mChatLayoutManager);
         rvNames.setHasFixedSize(true);
+
+        rvNames.setEmptyView(tvEmpty);
 
         contactAdapter.setOnAdapterClickListener(new ContactAdapter.OnAdapterClickListener() {
             @Override

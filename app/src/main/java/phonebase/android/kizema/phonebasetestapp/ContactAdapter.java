@@ -7,8 +7,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import phonebase.android.kizema.phonebasetestapp.model.Contact;
+import phonebase.android.kizema.phonebasetestapp.util.DictionaryHelper;
+import phonebase.android.kizema.phonebasetestapp.util.WordPatternBuilder;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
 
@@ -31,14 +37,23 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvEmail, tvPhone, tvPrice;
+        @BindView(R.id.tvEmail)
+        public TextView tvEmail;
+
+        @BindView(R.id.tvPhone)
+        public TextView tvPhone;
+
+        @BindView(R.id.tvPrice)
+        public TextView tvPrice;
+
+        @BindView(R.id.tvDictionary)
+        public TextView tvDictionary;
+
+        private StoppableThread thread;
 
         public ContactViewHolder(View itemView) {
             super(itemView);
-
-            tvEmail = (TextView) itemView.findViewById(R.id.tvEmail);
-            tvPhone = (TextView) itemView.findViewById(R.id.tvPhone);
-            tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
+            ButterKnife.bind(this, itemView);
         }
     }
 
@@ -53,8 +68,19 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     public void onBindViewHolder(final ContactViewHolder holder, final int position) {
         final Contact model = topics.get(position);
 
+        String phoneWord = "";
+        if (model.dictionaryWord != null &&
+                model.dictionaryWord.length() > 0){
+            phoneWord = model.dictionaryWord;
+        }
+
         holder.tvEmail.setText(model.getPhoneNumberOwner());
         holder.tvPhone.setText(model.getPhoneNumber());
+        if (phoneWord.length() > 0) {
+            holder.tvDictionary.setText(model.getDictionaryWord());
+        } else {
+            holder.tvDictionary.setText("calculating..");
+        }
         holder.tvPrice.setText(model.getPhoneNumberPrice() + "$");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +91,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 }
             }
         });
+
+        if (holder.thread != null){
+            holder.thread.cancelThread();
+            holder.thread = null;
+        }
+
+        if (phoneWord.length() == 0) {
+            holder.thread = new StoppableThread(model, holder);
+            holder.thread.start();
+        }
     }
 
     @Override
@@ -93,6 +129,62 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         this.listener = listener;
     }
 
+    private static class StoppableThread extends Thread{
+
+        private Contact model;
+        private boolean isCanceled = false;
+        private ContactViewHolder holder;
+
+        public StoppableThread(Contact contact, ContactViewHolder holder){
+            super();
+            this.model = contact;
+            this.holder = holder;
+        }
+
+        public void cancelThread(){
+            isCanceled = true;
+        }
+
+        @Override
+        public void run() {
+            if (isCanceled){
+                return;
+            }
+
+            List<String> dictionary = DictionaryHelper.getInstance().dictionary;
+            String patternString = WordPatternBuilder.getPattern(Long.parseLong(model.getPhoneNumber()));
+            Pattern pattern = Pattern.compile(patternString);
+            Matcher matcher;
+
+            for (String s : dictionary){
+                if (isCanceled){
+                    return;
+                }
+
+                matcher = pattern.matcher(s);
+                if (matcher.matches()){
+                    model.dictionaryWord = s;
+                    App.getDaoSession().getContactDao().update(model);
+                    App.getUIHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.tvDictionary.setText(model.dictionaryWord);
+                        }
+                    });
+                    return;
+                }
+            }
+
+            model.dictionaryWord = "-";
+            App.getDaoSession().getContactDao().update(model);
+            App.getUIHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    holder.tvDictionary.setText(model.dictionaryWord);
+                }
+            });
+        }
+    }
 }
 
 

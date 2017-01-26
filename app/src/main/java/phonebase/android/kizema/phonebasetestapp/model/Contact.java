@@ -20,12 +20,15 @@ public class Contact {
     @Id
     public String phoneNumberOwner;
 
-@Generated(hash = 885000141)
+    public String dictionaryWord;
+
+@Generated(hash = 416654410)
 public Contact(@NotNull String phoneNumber, int phoneNumberPrice,
-        String phoneNumberOwner) {
+        String phoneNumberOwner, String dictionaryWord) {
     this.phoneNumber = phoneNumber;
     this.phoneNumberPrice = phoneNumberPrice;
     this.phoneNumberOwner = phoneNumberOwner;
+    this.dictionaryWord = dictionaryWord;
 }
 
 @Generated(hash = 672515148)
@@ -54,5 +57,13 @@ public String getPhoneNumberOwner() {
 
 public void setPhoneNumberOwner(String phoneNumberOwner) {
     this.phoneNumberOwner = phoneNumberOwner;
+}
+
+public String getDictionaryWord() {
+    return this.dictionaryWord;
+}
+
+public void setDictionaryWord(String dictionaryWord) {
+    this.dictionaryWord = dictionaryWord;
 }
 }

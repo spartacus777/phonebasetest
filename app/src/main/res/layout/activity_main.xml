@@ -16,7 +16,7 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="11"
+            android:layout_weight="9"
             android:gravity="center"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
@@ -34,12 +34,22 @@
             android:layout_height="wrap_content"
             android:text="Phone" />
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="10"
+            android:gravity="center"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:text="Dictionary" />
+
         <LinearLayout
             android:id="@+id/llSort"
             android:layout_width="0dp"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
-            android:layout_weight="4"
+            android:layout_weight="7"
             android:orientation="horizontal"
             android:layout_height="match_parent">
 

@@ -23,6 +23,7 @@ import phonebase.android.kizema.phonebasetestapp.model.Contact;
 import phonebase.android.kizema.phonebasetestapp.model.ContactHelper;
 import phonebase.android.kizema.phonebasetestapp.uicontrol.SearchButtonControl;
 import phonebase.android.kizema.phonebasetestapp.uicontrol.SortController;
+import phonebase.android.kizema.phonebasetestapp.util.DictionaryHelper;
 
 public class MainActivity extends BaseActivity {
 
@@ -51,11 +52,15 @@ public class MainActivity extends BaseActivity {
 
     private SearchButtonControl searchButtonControl;
 
+    private DictionaryHelper dictionaryHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        dictionaryHelper = DictionaryHelper.getInstance();
 
         init(savedInstanceState);
         registerReceiver();

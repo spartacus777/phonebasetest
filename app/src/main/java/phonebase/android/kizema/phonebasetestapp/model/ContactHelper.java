@@ -66,4 +66,42 @@ public class ContactHelper {
 
         return contactlist;
     }
+
+    public static List<Contact> getAllSearch(SortController.Status status, String searchWord){
+        DaoSession daoSession = App.getDaoSession();
+        ContactDao confDao = daoSession.getContactDao();
+
+        QueryBuilder<Contact> queryBuilder = confDao.queryBuilder();
+        List<Contact> contactlist;
+
+        String pattern = "%"+searchWord+"%";
+
+        switch (status){
+            case SORT_UP:
+                contactlist = queryBuilder
+                        .whereOr(ContactDao.Properties.PhoneNumber.like(pattern),
+                                ContactDao.Properties.PhoneNumberOwner.like(pattern),
+                                ContactDao.Properties.PhoneNumberPrice.like(pattern))
+                        .orderAsc(ContactDao.Properties.PhoneNumberPrice)
+                        .list();
+                break;
+            case SORT_DOWN:
+                contactlist = queryBuilder
+                        .whereOr(ContactDao.Properties.PhoneNumber.like(pattern),
+                                ContactDao.Properties.PhoneNumberPrice.like(pattern),
+                                ContactDao.Properties.PhoneNumberOwner.like(pattern))
+                        .orderDesc(ContactDao.Properties.PhoneNumberPrice)
+                        .list();
+                break;
+            default:
+                contactlist = queryBuilder
+                        .whereOr(ContactDao.Properties.PhoneNumber.like(pattern),
+                                ContactDao.Properties.PhoneNumberPrice.like(pattern),
+                                ContactDao.Properties.PhoneNumberOwner.like(pattern))
+                        .list();
+                break;
+        }
+
+        return contactlist;
+    }
 }

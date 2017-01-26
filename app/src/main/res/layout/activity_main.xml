@@ -11,15 +11,15 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
         android:background="@color/colorPrimaryDark"
         android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="10"
+            android:layout_weight="11"
             android:gravity="center"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:text="Email" />
@@ -28,28 +28,42 @@
             android:layout_width="0dp"
             android:layout_weight="10"
             android:gravity="center"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
             android:textColor="@android:color/white"
             android:layout_height="wrap_content"
             android:text="Phone" />
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/llSort"
             android:layout_width="0dp"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:layout_height="wrap_content"
-            android:text="$$" />
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:layout_weight="4"
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/btnSort"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:background="@null"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_arrow_top"
-            android:layout_toLeftOf="@id/btnAdd"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:layout_height="wrap_content"
+                android:text="$$" />
+
+            <ImageView
+                android:id="@+id/btnSort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:background="@null"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_unsorted"/>
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 

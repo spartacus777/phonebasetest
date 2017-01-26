@@ -5,9 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -18,10 +20,16 @@ import butterknife.ButterKnife;
 import phonebase.android.kizema.phonebasetestapp.control.Controller;
 import phonebase.android.kizema.phonebasetestapp.model.Contact;
 import phonebase.android.kizema.phonebasetestapp.model.ContactHelper;
+import phonebase.android.kizema.phonebasetestapp.uicontrol.SortController;
 
 public class MainActivity extends Activity {
 
+    private static final int REQUEST_ADD = 32;
+
     private BroadcastReceiver dataFetchedReceiver;
+
+    @BindView(R.id.activity_main)
+    public View parent;
 
     @BindView(R.id.btnSearch)
     public ImageButton btnSearch;
@@ -35,10 +43,9 @@ public class MainActivity extends Activity {
     @BindView(R.id.rvNames)
     public RecyclerView rvNames;
 
-    @BindView(R.id.btnSort)
-    public ImageButton btnSort;
+    private ContactAdapter contactAdapter;
 
-    private ContactAdapter topicAdapter;
+    private SortController sortController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,31 +64,88 @@ public class MainActivity extends Activity {
     }
 
     private void init(Bundle savedInstanceState){
-        List<Contact> contactList = ContactHelper.getAll();
+        sortController = new SortController(parent, new SortController.OnSortListener() {
+            @Override
+            public void onSortChange(SortController.Status status) {
+                update();
+            }
+        });
+
+        List<Contact> contactList = ContactHelper.getAll(sortController.getStatus());
 
         if (savedInstanceState == null) {
             //update from server only if first time open, do not update while rotation
             Controller.getInstance().fetchContacts();
         }
 
-        topicAdapter = new ContactAdapter(contactList);
-        rvNames.setAdapter(topicAdapter);
+        contactAdapter = new ContactAdapter(contactList);
+        rvNames.setAdapter(contactAdapter);
         LinearLayoutManager mChatLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvNames.setLayoutManager(mChatLayoutManager);
         rvNames.setHasFixedSize(true);
+
+        contactAdapter.setOnAdapterClickListener(new ContactAdapter.OnAdapterClickListener() {
+            @Override
+            public void onItemClick(Contact contact) {
+                sendEmail(contact);
+            }
+        });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, NewEntryActivity.class);
+                startActivityForResult(intent, REQUEST_ADD);
+            }
+        });
     }
 
     private void registerReceiver(){
         dataFetchedReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                List<Contact> contactList = ContactHelper.getAll();
-                topicAdapter.update(contactList);
+                update();
             }
         };
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Controller.FETCH_ACTION);
         registerReceiver(dataFetchedReceiver, intentFilter, null, null);
+    }
+
+    private void update(){
+        List<Contact> contactList = ContactHelper.getAll(sortController.getStatus());
+        contactAdapter.update(contactList);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case REQUEST_ADD:
+                if (resultCode == RESULT_OK) {
+                    update();
+                }
+                break;
+        }
+    }
+
+    private void sendEmail(Contact contact){
+        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + contact.phoneNumberOwner));
+
+        String title = "Hi mr. " + contact.phoneNumberOwner;
+        String descr = new StringBuilder("Can I buy your phone num ")
+                .append(contact.phoneNumber)
+                .append(", I bet you price of ")
+                .append(contact.phoneNumberPrice)
+                .append("$")
+                .append("\n Regards, Anton Kizema").toString();
+
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[] {contact.phoneNumberOwner} );
+        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+        intent.putExtra(Intent.EXTRA_TEXT, descr);
+
+        startActivity(Intent.createChooser(intent, "Send Email via"));
     }
 }

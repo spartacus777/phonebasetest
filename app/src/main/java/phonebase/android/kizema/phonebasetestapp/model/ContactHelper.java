@@ -5,6 +5,7 @@ import org.greenrobot.greendao.query.QueryBuilder;
 import java.util.List;
 
 import phonebase.android.kizema.phonebasetestapp.App;
+import phonebase.android.kizema.phonebasetestapp.uicontrol.SortController;
 
 public class ContactHelper {
 
@@ -44,12 +45,24 @@ public class ContactHelper {
         }
     }
 
-    public static List<Contact> getAll(){
+    public static List<Contact> getAll(SortController.Status status){
         DaoSession daoSession = App.getDaoSession();
         ContactDao confDao = daoSession.getContactDao();
 
         QueryBuilder<Contact> queryBuilder = confDao.queryBuilder();
-        List<Contact> contactlist = queryBuilder.list();
+        List<Contact> contactlist;
+
+        switch (status){
+            case SORT_UP:
+                contactlist = queryBuilder.orderAsc(ContactDao.Properties.PhoneNumberPrice).list();
+                break;
+            case SORT_DOWN:
+                contactlist = queryBuilder.orderDesc(ContactDao.Properties.PhoneNumberPrice).list();
+                break;
+            default:
+                contactlist = queryBuilder.list();
+                break;
+        }
 
         return contactlist;
     }

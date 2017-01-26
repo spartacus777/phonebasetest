@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="ranking_btn_rounding">2dp</dimen>
+    <dimen name="ranking_btn_rounding">0dp</dimen>
     <dimen name="ranking_btn_width">1dp</dimen>
 
 

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/item_drawable"
+    android:layout_margin="3dp"
     android:paddingRight="20dp"
     android:paddingBottom="6dp"
     android:paddingTop="6dp">
@@ -11,7 +12,7 @@
         android:id="@+id/tvEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="10"
+        android:layout_weight="11"
         android:gravity="center"
         tools:text="Email" />
 

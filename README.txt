@@ -1,1 +1,1 @@
-(task/1.png)
+<a href="task/1.png"/>

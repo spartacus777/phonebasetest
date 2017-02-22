@@ -10,23 +10,11 @@ import phonebase.android.kizema.phonebasetestapp.uicontrol.SortController;
 public class ContactHelper {
 
     public static Contact create(String phone, int price, String owner){
-        Contact c = getContactByOwner(owner);
-        boolean isNew = false;
-
-        if (c == null){
-            isNew = true;
-            c = new Contact();
-        }
+        Contact c = new Contact();
 
         c.phoneNumber = phone;
         c.phoneNumberPrice = price;
         c.phoneNumberOwner = owner;
-
-        if (isNew) {
-            App.getDaoSession().getContactDao().insert(c);
-        } else {
-            App.getDaoSession().getContactDao().update(c);
-        }
 
         return c;
     }

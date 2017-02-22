@@ -9,7 +9,9 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import phonebase.android.kizema.phonebasetestapp.model.Contact;
 import phonebase.android.kizema.phonebasetestapp.model.ContactHelper;
+import phonebase.android.kizema.phonebasetestapp.util.ValuableContactHelper;
 import phonebase.android.kizema.phonebasetestapp.validator.EmailValidator;
 import phonebase.android.kizema.phonebasetestapp.validator.PhoneValidator;
 
@@ -59,9 +61,16 @@ public class NewEntryActivity extends Activity {
                     return;
                 }
 
-                ContactHelper.create(phone, Integer.parseInt(price), email);
+                Contact contact = ContactHelper.create(phone, Integer.parseInt(price), email);
+
+                contact.isProccessed = true;
+                contact.dictionaryWord = ValuableContactHelper.isValuablePhone(contact.getPhoneNumber());
+
+                App.getDaoSession().getContactDao().insertOrReplace(contact);
+
                 setResult(RESULT_OK);
                 finish();
+
             }
         });
     }

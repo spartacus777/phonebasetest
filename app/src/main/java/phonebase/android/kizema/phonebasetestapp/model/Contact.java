@@ -22,13 +22,16 @@ public class Contact {
 
     public String dictionaryWord;
 
-@Generated(hash = 416654410)
+    public boolean isProccessed = false;
+
+@Generated(hash = 860152030)
 public Contact(@NotNull String phoneNumber, int phoneNumberPrice,
-        String phoneNumberOwner, String dictionaryWord) {
+        String phoneNumberOwner, String dictionaryWord, boolean isProccessed) {
     this.phoneNumber = phoneNumber;
     this.phoneNumberPrice = phoneNumberPrice;
     this.phoneNumberOwner = phoneNumberOwner;
     this.dictionaryWord = dictionaryWord;
+    this.isProccessed = isProccessed;
 }
 
 @Generated(hash = 672515148)
@@ -65,5 +68,13 @@ public String getDictionaryWord() {
 
 public void setDictionaryWord(String dictionaryWord) {
     this.dictionaryWord = dictionaryWord;
+}
+
+public boolean getIsProccessed() {
+    return this.isProccessed;
+}
+
+public void setIsProccessed(boolean isProccessed) {
+    this.isProccessed = isProccessed;
 }
 }

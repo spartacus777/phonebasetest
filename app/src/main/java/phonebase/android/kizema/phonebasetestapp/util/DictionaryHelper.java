@@ -13,6 +13,7 @@ public class DictionaryHelper {
     public static DictionaryHelper instance;
 
     public List<String> dictionary;
+    public List<String> dictionaryWords;
 
     public static DictionaryHelper getInstance(){
         if (instance == null){
@@ -23,11 +24,12 @@ public class DictionaryHelper {
     }
 
     private DictionaryHelper(){
-        init();
+        initDictionary();
     }
 
-    private void init(){
+    private void initDictionary(){
         dictionary = new ArrayList<>(4000);
+        dictionaryWords = new ArrayList<>(4000);
 
         BufferedReader reader = null;
         try {
@@ -37,7 +39,8 @@ public class DictionaryHelper {
             String mLine;
             while ((mLine = reader.readLine()) != null) {
                 //process line
-                dictionary.add(mLine);
+                dictionary.add(WordToDigitHelper.getNumber(mLine));
+                dictionaryWords.add(mLine);
             }
         } catch (IOException e) {
             //log the exception

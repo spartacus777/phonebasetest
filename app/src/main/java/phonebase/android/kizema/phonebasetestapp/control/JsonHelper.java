@@ -6,6 +6,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
+import phonebase.android.kizema.phonebasetestapp.App;
 import phonebase.android.kizema.phonebasetestapp.model.Contact;
 import phonebase.android.kizema.phonebasetestapp.model.ContactHelper;
 
@@ -28,12 +29,12 @@ public class JsonHelper {
 
     private JsonHelper() {}
 
-    public List<Contact> parse(String bussJson) {
+    public void parse(String bussJson) {
         try {
             JSONArray obj = new JSONArray(bussJson);
-            List<Contact> busModels = new ArrayList<>();
-
             try {
+
+                List<Contact> contactListNew = new ArrayList<>();
 
                 for (int j = 0; j < obj.length(); ++j) {
                     String number = obj.getJSONObject(j).getString(PHONE_NUMBER);
@@ -43,17 +44,17 @@ public class JsonHelper {
                     int price = Integer.parseInt(priceStr.substring(0, priceStr.length() - 1));
 
                     Contact contact = ContactHelper.create(number, price, owner);
-                    busModels.add(contact);
+                    contactListNew.add(contact);
                 }
+
+                App.getDaoSession().getContactDao().insertOrReplaceInTx(contactListNew);
+
             } catch (JSONException ex) {
                 //probably broken entry, ignore it
             }
 
-            return busModels;
-
         } catch (JSONException e) {
             e.printStackTrace();
-            return null;
         }
     }
 

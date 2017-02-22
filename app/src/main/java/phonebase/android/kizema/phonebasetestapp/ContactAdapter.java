@@ -7,14 +7,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import phonebase.android.kizema.phonebasetestapp.model.Contact;
-import phonebase.android.kizema.phonebasetestapp.util.DictionaryHelper;
-import phonebase.android.kizema.phonebasetestapp.util.WordPatternBuilder;
+import phonebase.android.kizema.phonebasetestapp.util.ValuableContactHelper;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
 
@@ -26,13 +23,26 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         void onItemClick(Contact contact);
     }
 
-    public ContactAdapter(List<Contact> conferences) {
-        this.topics = conferences;
+    public ContactAdapter(final List<Contact> conferences) {
+
+        ValuableContactHelper.process(conferences, new ValuableContactHelper.OnCompletionListener() {
+            @Override
+            public void onComplete() {
+                ContactAdapter.this.topics = conferences;
+                notifyDataSetChanged();
+            }
+        });
     }
 
-    public void update(List<Contact> conferences){
-        this.topics = conferences;
-        notifyDataSetChanged();
+    public void update(final List<Contact> conferences){
+
+        ValuableContactHelper.process(conferences, new ValuableContactHelper.OnCompletionListener() {
+            @Override
+            public void onComplete() {
+                ContactAdapter.this.topics = conferences;
+                notifyDataSetChanged();
+            }
+        });
     }
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
@@ -48,8 +58,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
         @BindView(R.id.tvDictionary)
         public TextView tvDictionary;
-
-        private StoppableThread thread;
 
         public ContactViewHolder(View itemView) {
             super(itemView);
@@ -79,7 +87,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         if (phoneWord.length() > 0) {
             holder.tvDictionary.setText(model.getDictionaryWord());
         } else {
-            holder.tvDictionary.setText("calculating..");
+            holder.tvDictionary.setText("-");
         }
         holder.tvPrice.setText(model.getPhoneNumberPrice() + "$");
 
@@ -92,15 +100,15 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             }
         });
 
-        if (holder.thread != null){
-            holder.thread.cancelThread();
-            holder.thread = null;
-        }
-
-        if (phoneWord.length() == 0) {
-            holder.thread = new StoppableThread(model, holder);
-            holder.thread.start();
-        }
+//        if (holder.thread != null){
+//            holder.thread.cancelThread();
+//            holder.thread = null;
+//        }
+//
+//        if (phoneWord.length() == 0) {
+//            holder.thread = new StoppableThread(model, holder);
+//            holder.thread.start();
+//        }
     }
 
     @Override
@@ -129,62 +137,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         this.listener = listener;
     }
 
-    private static class StoppableThread extends Thread{
-
-        private Contact model;
-        private boolean isCanceled = false;
-        private ContactViewHolder holder;
-
-        public StoppableThread(Contact contact, ContactViewHolder holder){
-            super();
-            this.model = contact;
-            this.holder = holder;
-        }
-
-        public void cancelThread(){
-            isCanceled = true;
-        }
-
-        @Override
-        public void run() {
-            if (isCanceled){
-                return;
-            }
-
-            List<String> dictionary = DictionaryHelper.getInstance().dictionary;
-            String patternString = WordPatternBuilder.getPattern(Long.parseLong(model.getPhoneNumber()));
-            Pattern pattern = Pattern.compile(patternString);
-            Matcher matcher;
-
-            for (String s : dictionary){
-                if (isCanceled){
-                    return;
-                }
-
-                matcher = pattern.matcher(s);
-                if (matcher.matches()){
-                    model.dictionaryWord = s;
-                    App.getDaoSession().getContactDao().update(model);
-                    App.getUIHandler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.tvDictionary.setText(model.dictionaryWord);
-                        }
-                    });
-                    return;
-                }
-            }
-
-            model.dictionaryWord = "-";
-            App.getDaoSession().getContactDao().update(model);
-            App.getUIHandler().post(new Runnable() {
-                @Override
-                public void run() {
-                    holder.tvDictionary.setText(model.dictionaryWord);
-                }
-            });
-        }
-    }
 }
 
 

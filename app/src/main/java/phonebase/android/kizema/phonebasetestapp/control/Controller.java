@@ -8,10 +8,8 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.util.List;
 
 import phonebase.android.kizema.phonebasetestapp.App;
-import phonebase.android.kizema.phonebasetestapp.model.Contact;
 
 public class Controller {
 
@@ -41,16 +39,21 @@ public class Controller {
 
                     @Override
                     public void onResponse(Response response) throws IOException {
-                        String body = response.body().string();
-                        Log.v("rr", "getContacts() onResponse " + body);
+                        final String body = response.body().string();
+                        Log.v("rr", "getContacts() onResponse ");
 
-                        List<Contact> contacts = JsonHelper.getInstance().parse(body);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                JsonHelper.getInstance().parse(body);
 
-                        Log.v("rr", "getBusses() parse ready");
+                                Log.v("rr", "getBusses() parse ready");
 
-                        Intent intent = new Intent();
-                        intent.setAction(FETCH_ACTION);
-                        App.getContext().sendOrderedBroadcast(intent, null);
+                                Intent intent = new Intent();
+                                intent.setAction(FETCH_ACTION);
+                                App.getContext().sendOrderedBroadcast(intent, null);
+                            }
+                        }).start();
                     }
                 });
     }

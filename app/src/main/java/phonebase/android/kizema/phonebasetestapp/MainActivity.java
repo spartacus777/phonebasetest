@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -72,7 +74,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(dataFetchedReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(dataFetchedReceiver);
         super.onDestroy();
     }
 
@@ -134,20 +136,23 @@ public class MainActivity extends BaseActivity {
         dataFetchedReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.v("rr", "onReceive");
                 update();
             }
         };
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Controller.FETCH_ACTION);
-        registerReceiver(dataFetchedReceiver, intentFilter, null, null);
+        LocalBroadcastManager.getInstance(this).registerReceiver(dataFetchedReceiver, intentFilter);
     }
 
     private void update() {
         String searchText = etSearch.getText().toString();
 
         if (searchText.equalsIgnoreCase("")) {
+            Log.v("rr", "getAll");
             List<Contact> contactList = ContactHelper.getAll(sortController.getStatus());
+            Log.v("rr", "getAll end");
             contactAdapter.update(contactList);
         } else {
             List<Contact> contacts = ContactHelper.getAllSearch(sortController.getStatus(), searchText);

@@ -9,14 +9,23 @@ import phonebase.android.kizema.phonebasetestapp.uicontrol.SortController;
 
 public class ContactHelper {
 
-    public static Contact create(String phone, int price, String owner){
+    public static Contact create(String phone, int price, String owner, String dictionaryWord){
         Contact c = new Contact();
 
         c.phoneNumber = phone;
         c.phoneNumberPrice = price;
         c.phoneNumberOwner = owner;
+        c.dictionaryWord = dictionaryWord;
 
         return c;
+    }
+
+    public static double getContactSortValue(Contact contact){
+        if (contact.dictionaryWord == null || contact.dictionaryWord.length() == 0){
+            return 1000 / contact.getPhoneNumberPrice();
+        } else {
+            return 100000 * contact.dictionaryWord.length() / contact.getPhoneNumberPrice();
+        }
     }
 
     public static Contact getContactByOwner(String contactOwner){
@@ -48,6 +57,8 @@ public class ContactHelper {
                 contactlist = queryBuilder.orderDesc(ContactDao.Properties.PhoneNumberPrice).list();
                 break;
             default:
+//                contactlist = queryBuilder.order(ContactDao.Properties.PhoneNumberPrice).list();
+//                break;
                 contactlist = queryBuilder.list();
                 break;
         }

@@ -61,11 +61,7 @@ public class NewEntryActivity extends Activity {
                     return;
                 }
 
-                Contact contact = ContactHelper.create(phone, Integer.parseInt(price), email);
-
-                contact.isProccessed = true;
-                contact.dictionaryWord = ValuableContactHelper.isValuablePhone(contact.getPhoneNumber());
-
+                Contact contact = ContactHelper.create(phone, Integer.parseInt(price), email, ValuableContactHelper.isValuablePhone(phone));
                 App.getDaoSession().getContactDao().insertOrReplace(contact);
 
                 setResult(RESULT_OK);

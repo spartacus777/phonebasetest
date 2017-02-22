@@ -11,7 +11,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import phonebase.android.kizema.phonebasetestapp.model.Contact;
-import phonebase.android.kizema.phonebasetestapp.util.ValuableContactHelper;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
 
@@ -24,25 +23,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     }
 
     public ContactAdapter(final List<Contact> conferences) {
-
-        ValuableContactHelper.process(conferences, new ValuableContactHelper.OnCompletionListener() {
-            @Override
-            public void onComplete() {
-                ContactAdapter.this.topics = conferences;
-                notifyDataSetChanged();
-            }
-        });
+        ContactAdapter.this.topics = conferences;
+        notifyDataSetChanged();
     }
 
     public void update(final List<Contact> conferences){
-
-        ValuableContactHelper.process(conferences, new ValuableContactHelper.OnCompletionListener() {
-            @Override
-            public void onComplete() {
-                ContactAdapter.this.topics = conferences;
-                notifyDataSetChanged();
-            }
-        });
+        ContactAdapter.this.topics = conferences;
+        notifyDataSetChanged();
     }
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
@@ -99,16 +86,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 }
             }
         });
-
-//        if (holder.thread != null){
-//            holder.thread.cancelThread();
-//            holder.thread = null;
-//        }
-//
-//        if (phoneWord.length() == 0) {
-//            holder.thread = new StoppableThread(model, holder);
-//            holder.thread.start();
-//        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package phonebase.android.kizema.phonebasetestapp.control;
 
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.squareup.okhttp.Callback;
@@ -47,11 +48,11 @@ public class Controller {
                             public void run() {
                                 JsonHelper.getInstance().parse(body);
 
-                                Log.v("rr", "getBusses() parse ready");
+                                Log.v("rr", "parse ready");
 
                                 Intent intent = new Intent();
                                 intent.setAction(FETCH_ACTION);
-                                App.getContext().sendOrderedBroadcast(intent, null);
+                                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
                             }
                         }).start();
                     }

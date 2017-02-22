@@ -80,7 +80,8 @@ public class ContactHelper {
                 contactlist = queryBuilder
                         .whereOr(ContactDao.Properties.PhoneNumber.like(pattern),
                                 ContactDao.Properties.PhoneNumberOwner.like(pattern),
-                                ContactDao.Properties.PhoneNumberPrice.like(pattern))
+                                ContactDao.Properties.PhoneNumberPrice.like(pattern),
+                                ContactDao.Properties.DictionaryWord.like(pattern))
                         .orderAsc(ContactDao.Properties.PhoneNumberPrice)
                         .list();
                 break;
@@ -88,7 +89,8 @@ public class ContactHelper {
                 contactlist = queryBuilder
                         .whereOr(ContactDao.Properties.PhoneNumber.like(pattern),
                                 ContactDao.Properties.PhoneNumberPrice.like(pattern),
-                                ContactDao.Properties.PhoneNumberOwner.like(pattern))
+                                ContactDao.Properties.PhoneNumberOwner.like(pattern),
+                                ContactDao.Properties.DictionaryWord.like(pattern))
                         .orderDesc(ContactDao.Properties.PhoneNumberPrice)
                         .list();
                 break;
@@ -96,7 +98,8 @@ public class ContactHelper {
                 contactlist = queryBuilder
                         .whereOr(ContactDao.Properties.PhoneNumber.like(pattern),
                                 ContactDao.Properties.PhoneNumberPrice.like(pattern),
-                                ContactDao.Properties.PhoneNumberOwner.like(pattern))
+                                ContactDao.Properties.PhoneNumberOwner.like(pattern),
+                                ContactDao.Properties.DictionaryWord.like(pattern))
                         .orderDesc(ContactDao.Properties.SortValue)
                         .list();
                 break;

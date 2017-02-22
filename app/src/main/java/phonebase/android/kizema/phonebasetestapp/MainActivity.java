@@ -26,7 +26,6 @@ import phonebase.android.kizema.phonebasetestapp.model.ContactHelper;
 import phonebase.android.kizema.phonebasetestapp.uicontrol.SearchButtonControl;
 import phonebase.android.kizema.phonebasetestapp.uicontrol.SortController;
 import phonebase.android.kizema.phonebasetestapp.util.AppRecyclerView;
-import phonebase.android.kizema.phonebasetestapp.util.DictionaryHelper;
 
 public class MainActivity extends BaseActivity {
 
@@ -56,17 +55,11 @@ public class MainActivity extends BaseActivity {
 
     private SortController sortController;
 
-    private SearchButtonControl searchButtonControl;
-
-    private DictionaryHelper dictionaryHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        dictionaryHelper = DictionaryHelper.getInstance();
 
         init(savedInstanceState);
         registerReceiver();
@@ -129,14 +122,13 @@ public class MainActivity extends BaseActivity {
             public void afterTextChanged(Editable editable) {}
         });
 
-        searchButtonControl = new SearchButtonControl(this, btnSearch, etSearch);
+        new SearchButtonControl(this, btnSearch, etSearch);
     }
 
     private void registerReceiver() {
         dataFetchedReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.v("rr", "onReceive");
                 update();
             }
         };
@@ -150,9 +142,7 @@ public class MainActivity extends BaseActivity {
         String searchText = etSearch.getText().toString();
 
         if (searchText.equalsIgnoreCase("")) {
-            Log.v("rr", "getAll");
             List<Contact> contactList = ContactHelper.getAll(sortController.getStatus());
-            Log.v("rr", "getAll end");
             contactAdapter.update(contactList);
         } else {
             List<Contact> contacts = ContactHelper.getAllSearch(sortController.getStatus(), searchText);

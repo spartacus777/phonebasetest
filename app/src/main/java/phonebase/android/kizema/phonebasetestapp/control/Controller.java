@@ -16,6 +16,7 @@ import phonebase.android.kizema.phonebasetestapp.util.EncriptAlgo;
 public class Controller {
 
     public static final String FETCH_ACTION = "FETCH_ACTION";
+    public static final String TAG = "TAG";
 
     private static Controller instance;
 
@@ -47,28 +48,25 @@ public class Controller {
     }
 
     private void fetchOurContacts(){
-        Log.v("rr", "getContacts() request");
+        Log.v(TAG, "getContacts() request");
 
         HttpHelper.getInstance().getAsync(ApiHelper.URL,
                 new Callback() {
                     @Override
                     public void onFailure(Request request, IOException e) {
-                        Log.v("rr", "getContacts() exception " + e);
+                        Log.v(TAG, "getContacts() exception " + e);
                         handleFetchFinished();
                     }
 
                     @Override
                     public void onResponse(Response response) throws IOException {
                         final String body = response.body().string();
-                        Log.v("rr", "getContacts() onResponse ");
+                        Log.v(TAG, "getContacts() onResponse ");
 
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Log.v("rr", "body : " + body);
                                 JsonHelper.getInstance().parse(body);
-
-                                Log.v("rr", "parse ready");
                                 handleFetchFinished();
                             }
                         }).start();
@@ -77,25 +75,25 @@ public class Controller {
     }
 
     private void fetchStolenContacts(){
-        Log.v("rr", "getContacts() request");
+        Log.v(TAG, "getContacts() request");
 
         HttpHelper.getInstance().getAsync(ApiHelper.STOLEN_URL,
                 new Callback() {
                     @Override
                     public void onFailure(Request request, IOException e) {
-                        Log.v("rr", "getContacts() exception " + e);
+                        Log.v(TAG, "getContacts() exception " + e);
                         handleFetchFinished();
                     }
 
                     @Override
                     public void onResponse(Response response) throws IOException {
                         final String body = response.body().string();
-                        Log.v("rr", "fetchStolenContacts() onResponse ");
+                        Log.v(TAG, "fetchStolenContacts() onResponse ");
 
                         String decryptedJson = EncriptAlgo.decode(body);
-                        Log.v("rr", "decryptedJson : " + decryptedJson);
+                        Log.v(TAG, "decryptedJson : " + decryptedJson);
+
                         JsonHelper.getInstance().parse(decryptedJson);
-                        Log.v("rr", "parse stolen contacts ready");
 
                         handleFetchFinished();
                     }

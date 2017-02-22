@@ -3,10 +3,6 @@ package phonebase.android.kizema.phonebasetestapp.validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by A.Kizema on 22.11.2016.
- */
-
 public class NameValidator {
     private static final String PASSWORD_PATTERN =
             "(.{1,20})";

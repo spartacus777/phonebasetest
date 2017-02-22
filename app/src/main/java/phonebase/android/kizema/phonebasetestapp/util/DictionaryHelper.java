@@ -10,6 +10,7 @@ import phonebase.android.kizema.phonebasetestapp.App;
 
 public class DictionaryHelper {
 
+    private static final String DICTIONARY_FILE = "dictionary.txt";
     public static DictionaryHelper instance;
 
     public List<String> dictionary;
@@ -34,7 +35,7 @@ public class DictionaryHelper {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(
-                    new InputStreamReader(App.getContext().getAssets().open("dictionary.txt")));
+                    new InputStreamReader(App.getContext().getAssets().open(DICTIONARY_FILE)));
 
             String mLine;
             while ((mLine = reader.readLine()) != null) {

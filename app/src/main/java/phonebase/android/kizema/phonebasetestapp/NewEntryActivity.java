@@ -61,12 +61,11 @@ public class NewEntryActivity extends Activity {
                     return;
                 }
 
-                Contact contact = ContactHelper.create(phone, Integer.parseInt(price), email, ValuableContactHelper.isValuablePhone(phone));
+                Contact contact = ContactHelper.create(phone, Integer.parseInt(price), email, ValuableContactHelper.getValuablePhone(phone));
                 App.getDaoSession().getContactDao().insertOrReplace(contact);
 
                 setResult(RESULT_OK);
                 finish();
-
             }
         });
     }

@@ -1,7 +1,5 @@
 package phonebase.android.kizema.phonebasetestapp.control;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -15,12 +13,11 @@ import phonebase.android.kizema.phonebasetestapp.util.ValuableContactHelper;
 
 public class JsonHelper {
 
+    private static final String PHONE_NUMBER = "phoneNumber";
+    private static final String PHONE_NUMBER_PRICE = "phoneNumberPrice";
+    private static final String PHONE_NUMBER_OWNER = "phoneNumberOwner";
+
     private static JsonHelper instance;
-
-    public static final String PHONE_NUMBER = "phoneNumber";
-    public static final String PHONE_NUMBER_PRICE = "phoneNumberPrice";
-    public static final String PHONE_NUMBER_OWNER = "phoneNumberOwner";
-
 
     public static synchronized JsonHelper getInstance() {
         if (instance == null) {
@@ -46,13 +43,11 @@ public class JsonHelper {
 
                     int price = Integer.parseInt(priceStr.substring(0, priceStr.length() - 1));
 
-                    Contact contact = ContactHelper.create(number, price, owner, ValuableContactHelper.isValuablePhone(number));
+                    Contact contact = ContactHelper.create(number, price, owner, ValuableContactHelper.getValuablePhone(number));
                     contactListNew.add(contact);
                 }
 
-                Log.v("rr", "insert start");
                 App.getDaoSession().getContactDao().insertOrReplaceInTx(contactListNew);
-                Log.v("rr", "insert end");
 
             } catch (JSONException ex) {
                 //probably broken entry, ignore it

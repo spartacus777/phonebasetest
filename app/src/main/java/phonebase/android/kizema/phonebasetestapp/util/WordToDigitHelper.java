@@ -5,11 +5,9 @@ import java.util.Map;
 
 public class WordToDigitHelper {
 
-    static Map<Character, Integer> map;
+    private static final Map<Character, Integer> map = new HashMap<>(26);
 
     static {
-        map = new HashMap<>(26);
-
         map.put('a', 2);
         map.put('b', 2);
         map.put('c', 2);

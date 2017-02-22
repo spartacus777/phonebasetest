@@ -58,6 +58,11 @@ public class EncriptAlgo {
         f2745a = new byte[]{(byte) 22, (byte) 0, (byte) 5, (byte) 102, (byte) 116, (byte) 102, (byte) 107, (byte) 113, (byte) 0, (byte) 101, (byte) 4, (byte) 21, (byte) 17, (byte) 7, (byte) 115, (byte) 99};
     }
 
+    /**
+     *
+     * @param str decode string from remote stolen apk's server
+     * @return decoded string
+     */
     public static String decode(String str) {
         byte[] bArr = null;
         try {
@@ -75,7 +80,7 @@ public class EncriptAlgo {
         return b == 61 || f2458b[b] != -1;
     }
 
-    static byte[] m5023b(byte[] bArr) {
+    private static byte[] m5023b(byte[] bArr) {
         byte[] obj = new byte[bArr.length];
         int i = 0;
         for (int i2 = 0; i2 < bArr.length; i2++) {
@@ -90,7 +95,7 @@ public class EncriptAlgo {
         return obj2;
     }
 
-    public static byte[] m5022a(byte[] bArr) {
+    private static byte[] m5022a(byte[] bArr) {
         int i = 0;
         byte[] b = m5023b(bArr);
         if (b.length == 0) {

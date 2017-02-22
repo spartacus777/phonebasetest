@@ -17,6 +17,8 @@ public class Contact {
     @NotNull
     public int phoneNumberPrice;
 
+    public double sortValue;
+
     @Id
     public String phoneNumberOwner;
 
@@ -34,11 +36,12 @@ public Contact(@NotNull String phoneNumber, int phoneNumberPrice,
 public Contact() {
 }
 
-@Generated(hash = 416654410)
+@Generated(hash = 173475996)
 public Contact(@NotNull String phoneNumber, int phoneNumberPrice,
-        String phoneNumberOwner, String dictionaryWord) {
+        double sortValue, String phoneNumberOwner, String dictionaryWord) {
     this.phoneNumber = phoneNumber;
     this.phoneNumberPrice = phoneNumberPrice;
+    this.sortValue = sortValue;
     this.phoneNumberOwner = phoneNumberOwner;
     this.dictionaryWord = dictionaryWord;
 }
@@ -73,6 +76,14 @@ public String getDictionaryWord() {
 
 public void setDictionaryWord(String dictionaryWord) {
     this.dictionaryWord = dictionaryWord;
+}
+
+public double getSortValue() {
+    return this.sortValue;
+}
+
+public void setSortValue(double sortValue) {
+    this.sortValue = sortValue;
 }
 
 }

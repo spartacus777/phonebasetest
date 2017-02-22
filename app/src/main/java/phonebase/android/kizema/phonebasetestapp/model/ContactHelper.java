@@ -17,6 +17,8 @@ public class ContactHelper {
         c.phoneNumberOwner = owner;
         c.dictionaryWord = dictionaryWord;
 
+        c.sortValue = getContactSortValue(c);
+
         return c;
     }
 
@@ -57,9 +59,7 @@ public class ContactHelper {
                 contactlist = queryBuilder.orderDesc(ContactDao.Properties.PhoneNumberPrice).list();
                 break;
             default:
-//                contactlist = queryBuilder.order(ContactDao.Properties.PhoneNumberPrice).list();
-//                break;
-                contactlist = queryBuilder.list();
+                contactlist = queryBuilder.orderDesc(ContactDao.Properties.SortValue).list();
                 break;
         }
 
@@ -97,6 +97,7 @@ public class ContactHelper {
                         .whereOr(ContactDao.Properties.PhoneNumber.like(pattern),
                                 ContactDao.Properties.PhoneNumberPrice.like(pattern),
                                 ContactDao.Properties.PhoneNumberOwner.like(pattern))
+                        .orderDesc(ContactDao.Properties.SortValue)
                         .list();
                 break;
         }

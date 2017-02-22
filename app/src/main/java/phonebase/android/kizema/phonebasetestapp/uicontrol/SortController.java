@@ -1,5 +1,6 @@
 package phonebase.android.kizema.phonebasetestapp.uicontrol;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -8,6 +9,8 @@ import butterknife.ButterKnife;
 import phonebase.android.kizema.phonebasetestapp.R;
 
 public class SortController {
+
+    private static final String STATUS = "Status";
 
     @BindView(R.id.btnSort)
     public ImageView btnSort;
@@ -76,4 +79,17 @@ public class SortController {
         }
     }
 
+    public void handleOnSaveState(Bundle data){
+        data.putSerializable(STATUS, status);
+    }
+
+    public void handleOnRestoreState(Bundle data){
+        if (data != null){
+            Object obj = data.getSerializable(STATUS);
+            if (obj != null){
+                status = (Status) obj;
+                setProperImage();
+            }
+        }
+    }
 }

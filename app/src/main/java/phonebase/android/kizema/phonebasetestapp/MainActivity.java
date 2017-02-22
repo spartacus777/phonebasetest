@@ -10,7 +10,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -58,11 +57,17 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
         init(savedInstanceState);
         registerReceiver();
+    }
+
+    protected void onSaveInstanceState(Bundle icicle) {
+        super.onSaveInstanceState(icicle);
+        sortController.handleOnSaveState(icicle);
     }
 
     @Override
@@ -78,6 +83,7 @@ public class MainActivity extends BaseActivity {
                 update();
             }
         });
+        sortController.handleOnRestoreState(savedInstanceState);
 
         List<Contact> contactList = ContactHelper.getAll(sortController.getStatus());
 

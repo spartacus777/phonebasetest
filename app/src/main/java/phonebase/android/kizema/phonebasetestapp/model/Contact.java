@@ -7,20 +7,21 @@ import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.NotNull;
 
 @Entity(indexes = {
-        @Index(value = "phoneNumberOwner", unique = true)
+        @Index(value = "phoneNumber", unique = true)
 })
 public class Contact {
 
-    @NotNull
+    @Id
     public String phoneNumber;
 
     @NotNull
     public int phoneNumberPrice;
 
+    @NotNull
+    public String phoneNumberOwner;
+
     public double sortValue;
 
-    @Id
-    public String phoneNumberOwner;
 
     public String dictionaryWord;
 
@@ -36,13 +37,14 @@ public Contact(@NotNull String phoneNumber, int phoneNumberPrice,
 public Contact() {
 }
 
-@Generated(hash = 173475996)
-public Contact(@NotNull String phoneNumber, int phoneNumberPrice,
-        double sortValue, String phoneNumberOwner, String dictionaryWord) {
+@Generated(hash = 328827515)
+public Contact(String phoneNumber, int phoneNumberPrice,
+        @NotNull String phoneNumberOwner, double sortValue,
+        String dictionaryWord) {
     this.phoneNumber = phoneNumber;
     this.phoneNumberPrice = phoneNumberPrice;
-    this.sortValue = sortValue;
     this.phoneNumberOwner = phoneNumberOwner;
+    this.sortValue = sortValue;
     this.dictionaryWord = dictionaryWord;
 }
 
